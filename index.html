@@ -65,11 +65,11 @@
                     const data = await res.json();
                     console.log("スプシ保存:", data);
             
+                    alert("送信成功");
                     // 1秒待機してからウィンドウを閉じる
                     setTimeout(() => {
                         liff.closeWindow();
                     }, 1000);
-                    alert("送信成功");
             
                 } catch (err) {
                     alert("送信に失敗しました。: " + err);
