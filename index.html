@@ -61,7 +61,7 @@
                 }]).catch(err => alert("LINE送信失敗: " + err));
         
                 // スプレッドシートに送信
-                fetch("https://script.google.com/macros/s/AKfycbz7FrF5OlHbWeqOyuaAlFOm_2tLJznJetTMTlHx0esQTmVIwrJp5DWPbhrtYaQcLHMR/exec", {  // ←GASのURLに変更
+                fetch("https://script.google.com/macros/library/d/11PPwO_BBFrfP3u-EWwtY4-Fl-DsrRyFJebZNDUq6fWSFq4-qWShv90bb/3", {  // ←GASのURLに変更
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
