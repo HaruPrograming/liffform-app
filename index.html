@@ -49,10 +49,13 @@
                     const name = profile.displayName;
             
                     // LINE送信
-                    await liff.sendMessages([{ type: 'text', text: `ユーザー: ${name}\n開始: ${start}\n終了: ${end}\n備考: ${note}` }]);
+                    await liff.sendMessages([{
+                        type: 'text',
+                        text: `ユーザー: ${name}\n開始: ${start}\n終了: ${end}\n備考: ${note}`
+                    }]);
             
                     // スプレッドシート送信
-                    const res = await fetch("https://script.google.com/macros/library/d/11PPwO_BBFrfP3u-EWwtY4-Fl-DsrRyFJebZNDUq6fWSFq4-qWShv90bb/4", {
+                    const res = await fetch("GASのURL", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ user: name, start, end, note })
@@ -60,12 +63,16 @@
                     const data = await res.json();
                     console.log("スプシ保存:", data);
             
-                    liff.closeWindow();
+                    // 1秒待機してからウィンドウを閉じる
+                    setTimeout(() => {
+                        liff.closeWindow();
+                    }, 1000);
+            
                 } catch (err) {
                     alert("送信失敗: " + err);
                 }
             
-                return false;
+                return false; // ページリロード防止
             });
         });
     </script>
