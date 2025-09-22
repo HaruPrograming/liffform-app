@@ -55,7 +55,7 @@
                     }]);
             
                     // スプレッドシート送信
-                    const res = await fetch("GASのURL", {
+                    const res = await fetch("https://script.google.com/macros/s/AKfycbz7FrF5OlHbWeqOyuaAlFOm_2tLJznJetTMTlHx0esQTmVIwrJp5DWPbhrtYaQcLHMR/exec", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ user: name, start, end, note })
