@@ -54,7 +54,10 @@
                     type: 'text',
                     text: msg
                 }]).then(() => {
-                    // liff.closeWindow();
+                    // 1秒待ってから閉じる
+                    setTimeout(() => {
+                        liff.closeWindow();
+                    }, 1000);
                 }).catch((error) => {
                     alert('送信失敗: ' + error);
                 });
