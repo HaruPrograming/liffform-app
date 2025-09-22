@@ -55,11 +55,11 @@
                     type: 'text',
                     text: msg
                 }]).then(() => {
-                    console.log("送信成功");
+                    // console.log("送信成功");
                     // 1秒待機してから閉じる
-                    setTimeout(() => {
+                    // setTimeout(() => {
                         liff.closeWindow();
-                    }, 1000);
+                    // }, 1000);
                 }).catch((error) => {
                     alert('送信失敗: ' + error);
                 });
