@@ -52,7 +52,7 @@
                     await liff.sendMessages([{ type: 'text', text: `ユーザー: ${name}\n開始: ${start}\n終了: ${end}\n備考: ${note}` }]);
             
                     // スプレッドシート送信
-                    const res = await fetch("https://script.google.com/macros/s/AKfycbz7FrF5OlHbWeqOyuaAlFOm_2tLJznJetTMTlHx0esQTmVIwrJp5DWPbhrtYaQcLHMR/exec", {
+                    const res = await fetch("https://script.google.com/macros/library/d/11PPwO_BBFrfP3u-EWwtY4-Fl-DsrRyFJebZNDUq6fWSFq4-qWShv90bb/4", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ user: name, start, end, note })
