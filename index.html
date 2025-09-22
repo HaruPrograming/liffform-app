@@ -40,31 +40,36 @@
                 .catch(err => console.error("LIFF init failed", err));
 
             // フォーム送信イベント
-            $('form').submit(function () {
+           $('form').submit(function () {
                 const start = $('input[name="start"]').val();
                 const end   = $('input[name="end"]').val();
                 const note  = $('textarea[name="note"]').val();
-
-                const msg =
-                    `ユーザー: ${name} (${userId})\n` +
-                    `開始: ${start}\n` +
-                    `終了: ${end}\n` +
-                    `備考: ${note}`;
-
-                liff.sendMessages([{
-                    type: 'text',
-                    text: msg
-                }]).then(() => {
-                    // console.log("送信成功");
-                    // 1秒待機してから閉じる
-                    // setTimeout(() => {
-                    //     liff.closeWindow();
-                    // }, 1000);
-                }).catch((error) => {
-                    alert('送信失敗: ' + error);
+            
+                // ユーザープロフィール取得
+                liff.getProfile().then(profile => {
+                    const name = profile.displayName; // 表示名
+                    const userId = profile.userId;    // ユーザーID
+            
+                    const msg =
+                        `ユーザー: ${name} (${userId})\n` +
+                        `開始: ${start}\n` +
+                        `終了: ${end}\n` +
+                        `備考: ${note}`;
+            
+                    liff.sendMessages([{
+                        type: 'text',
+                        text: msg
+                    }]).then(() => {
+                        console.log("送信成功");
+                        setTimeout(() => {
+                            liff.closeWindow();
+                        }, 1000);
+                    }).catch((error) => {
+                        alert('送信失敗: ' + error);
+                    });
                 });
-
-                return false;
+                
+                return false; // ページリロード防止
             });
         });
     </script>
