@@ -63,9 +63,13 @@
                         body: JSON.stringify({ user: name, start, end, note })
                     });
                     const data = await res.json();
-                    console.log("スプシ保存:", data);
-            
-                    alert("送信成功");
+                    
+                    // LINEに送信完了メッセージ
+                    await liff.sendMessages([{
+                        type: 'text',
+                        text: '予約の送信が完了しました！'
+                    }]);
+                    
                     // 1秒待機してからウィンドウを閉じる
                     setTimeout(() => {
                         liff.closeWindow();
