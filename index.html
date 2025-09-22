@@ -35,59 +35,32 @@
 
 
     <!-- ここにまとめてJSを書く -->
-    <script>
-     $(document).ready(function () {
-        const liffId = "2008152613-JWjGdjMk"; // 自分のLIFF ID
-    
-        liff.init({ liffId: liffId })
-            .then(() => {
-                console.log("LIFF init success");
-    
-                // 初期化完了後にフォームイベントを登録
-                $('form').submit(async function () {
-                    const start = $('input[name="start"]').val();
-                    const end   = $('input[name="end"]').val();
-                    const note  = $('textarea[name="note"]').val();
-    
-                    try {
-                        const profile = await liff.getProfile();
-                        const name = profile.displayName;
-    
-                        // LINE送信
-                        await liff.sendMessages([{
-                            type: 'text',
-                            text: `ユーザー: ${name}\n開始: ${start}\n終了: ${end}\n備考: ${note}`
-                        }]);
-    
-                        // スプレッドシート送信
-                        const res = await fetch("https://script.google.com/macros/library/d/11PPwO_BBFrfP3u-EWwtY4-Fl-DsrRyFJebZNDUq6fWSFq4-qWShv90bb/5", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ user: name, start, end, note })
-                        });
-                        const data = await res.json();
-    
-                        // LINEに送信完了メッセージ
-                        await liff.sendMessages([{
-                            type: 'text',
-                            text: '予約の送信が完了しました！'
-                        }]);
-    
-                        // 1秒待機して閉じる
-                        // await new Promise(resolve => setTimeout(resolve, 1000));
-                        liff.closeWindow();
-    
-                    } catch (err) {
-                        alert("送信に失敗しました: " + err);
-                    }
-    
-                    return false; // ページリロード防止
-                });
-    
-            })
-            .catch(err => console.error("LIFF init failed", err));
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+      <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+      <script>
+        liff.init({
+          liffId: 2008152613-JWjGdjMk
+        }).catch((err) => {
+          console.log(err);
         });
-
-    </script>
+    
+        liff.ready.then(() => {
+          if (!liff.isLoggedIn()) {
+            liff.login();
+          }
+          const idToken = liff.getDecodedIDToken();
+          const userId = idToken.sub;
+          $('form').append(`<input type="hidden" name="userId" value="${userId}">`);
+          $('form').append(`<input type="submit" class="mt-4 btn btn-primary" value="送信">`);
+        })
+    
+        $('form').submit(function( event ) {
+          event.preventDefault();
+          $.post( 'https://script.google.com/macros/library/d/11PPwO_BBFrfP3u-EWwtY4-Fl-DsrRyFJebZNDUq6fWSFq4-qWShv90bb/5 $('form').serialize() );
+        });
+      </script>
 </body>
 </html>
