@@ -40,35 +40,44 @@
                 .catch(err => console.error("LIFF init failed", err));
 
             // フォーム送信イベント
-           $('form').submit(function () {
-                const start = $('input[name="start"]').val();
-                const end   = $('input[name="end"]').val();
-                const note  = $('textarea[name="note"]').val();
-            
-                // ユーザープロフィール取得
-                liff.getProfile().then(profile => {
-                    const name = profile.displayName; // 表示名
-                    const userId = profile.userId;    // ユーザーID
-            
-                    const msg =
-                        `ユーザー: ${name}\n` +
-                        `開始: ${start}\n` +
-                        `終了: ${end}\n` +
-                        `備考: ${note}`;
-            
-                    liff.sendMessages([{
-                        type: 'text',
-                        text: msg
-                    }]).then(() => {
-                        console.log("送信成功");
-                        setTimeout(() => {
-                            liff.closeWindow();
-                        }, 1000);
-                    }).catch((error) => {
-                        alert('送信失敗: ' + error);
-                    });
+          $('form').submit(function () {
+            const start = $('input[name="start"]').val();
+            const end   = $('input[name="end"]').val();
+            const note  = $('textarea[name="note"]').val();
+        
+            liff.getProfile().then(profile => {
+                const name = profile.displayName;
+        
+                const msg =
+                    `ユーザー: ${name}\n` +
+                    `開始: ${start}\n` +
+                    `終了: ${end}\n` +
+                    `備考: ${note}`;
+        
+                // LINEに送信
+                liff.sendMessages([{
+                    type: 'text',
+                    text: msg
+                }]).catch(err => alert("LINE送信失敗: " + err));
+        
+                // スプレッドシートに送信
+                fetch("https://script.google.com/macros/s/AKfycbyZ2jkMo1HXOotcQTd8TbjpY2WiAEVplIspMtGe7XB-p6pKF0WYOKhNnmWI8vOvNocw1A/exec", {  // ←GASのURLに変更
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        user: name,
+                        start: start,
+                        end: end,
+                        note: note
+                    })
+                }).then(res => res.json())
+                  .then(data => {
+                      console.log("スプシ保存:", data);
+                      setTimeout(() => liff.closeWindow(), 1000);
+                  })
+                  .catch(err => alert("スプシ保存失敗: " + err));
                 });
-                
+            
                 return false; // ページリロード防止
             });
         });
