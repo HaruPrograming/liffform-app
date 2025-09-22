@@ -54,7 +54,8 @@
                     type: 'text',
                     text: msg
                 }]).then(() => {
-                    // 1秒待ってから閉じる
+                    console.log("送信成功");
+                    // 1秒待機してから閉じる
                     setTimeout(() => {
                         liff.closeWindow();
                     }, 1000);
